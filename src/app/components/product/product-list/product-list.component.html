@@ -1,0 +1,49 @@
+<div class="toolbar">
+  <input
+    type="text"
+    placeholder="🔍 ค้นหาสินค้าหรือหมวดหมู่..."
+    [ngModel]="searchTerm()"
+    (ngModelChange)="onSearchChange($event)"
+  />
+  <a routerLink="/products/new" class="btn-add">+ เพิ่มสินค้าใหม่</a>
+</div>
+
+<div class="summary" *ngIf="filteredProducts.length > 0">
+  ทั้งหมด {{ filteredProducts.length }} รายการ | มูลค่าคงคลังรวม
+  {{ totalValue | number: '1.0-2' }} บาท
+</div>
+
+<table class="product-table" *ngIf="filteredProducts.length > 0; else empty">
+  <thead>
+    <tr>
+      <th>ชื่อสินค้า</th>
+      <th>หมวดหมู่</th>
+      <th>ราคา</th>
+      <th>คงเหลือ</th>
+      <th>หน่วย</th>
+      <th>แก้ไขล่าสุด</th>
+      <th>จัดการ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of filteredProducts">
+      <td>
+        <strong>{{ product.name }}</strong>
+        <div class="desc" *ngIf="product.description">{{ product.description }}</div>
+      </td>
+      <td>{{ product.category }}</td>
+      <td>{{ product.price | number: '1.0-2' }} บาท</td>
+      <td [class.low-stock]="product.quantity < 10">{{ product.quantity }}</td>
+      <td>{{ product.unit }}</td>
+      <td>{{ product.updatedAt | date: 'd MMM y, HH:mm' }}</td>
+      <td class="actions">
+        <a [routerLink]="['/products/edit', product.id]" class="btn-edit">แก้ไข</a>
+        <button class="btn-delete" (click)="onDelete(product)">ลบ</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #empty>
+  <div class="empty-state">ไม่พบสินค้า ลองเพิ่มสินค้าใหม่ดูสิครับ</div>
+</ng-template>

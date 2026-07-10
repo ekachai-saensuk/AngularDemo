@@ -1,0 +1,65 @@
+<div class="form-card">
+  <h2>{{ isEditMode ? 'แก้ไขสินค้า' : 'เพิ่มสินค้าใหม่' }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="field">
+      <label>ชื่อสินค้า</label>
+      <input type="text" formControlName="name" placeholder="เช่น เสื้อยืดคอกลม" />
+      <div class="error" *ngIf="f['name'].touched && f['name'].invalid">
+        กรุณากรอกชื่อสินค้าอย่างน้อย 2 ตัวอักษร
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>หมวดหมู่</label>
+        <select formControlName="category">
+          <option value="" disabled>-- เลือกหมวดหมู่ --</option>
+          <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+        </select>
+        <div class="error" *ngIf="f['category'].touched && f['category'].invalid">
+          กรุณาเลือกหมวดหมู่
+        </div>
+      </div>
+
+      <div class="field">
+        <label>หน่วยนับ</label>
+        <select formControlName="unit">
+          <option value="" disabled>-- เลือกหน่วย --</option>
+          <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+        </select>
+        <div class="error" *ngIf="f['unit'].touched && f['unit'].invalid">
+          กรุณาเลือกหน่วยนับ
+        </div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>ราคา (บาท)</label>
+        <input type="number" formControlName="price" min="0" step="0.01" />
+        <div class="error" *ngIf="f['price'].touched && f['price'].invalid">
+          กรุณากรอกราคาที่ถูกต้อง
+        </div>
+      </div>
+
+      <div class="field">
+        <label>จำนวนคงคลัง</label>
+        <input type="number" formControlName="quantity" min="0" />
+        <div class="error" *ngIf="f['quantity'].touched && f['quantity'].invalid">
+          กรุณากรอกจำนวนที่ถูกต้อง
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>รายละเอียดเพิ่มเติม (ถ้ามี)</label>
+      <textarea formControlName="description" rows="3" placeholder="รายละเอียดสินค้า..."></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()">ยกเลิก</button>
+      <button type="submit" class="btn-save">{{ isEditMode ? 'บันทึกการแก้ไข' : 'เพิ่มสินค้า' }}</button>
+    </div>
+  </form>
+</div>
